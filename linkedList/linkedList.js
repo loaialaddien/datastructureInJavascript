@@ -2,9 +2,7 @@
 exports.__esModule = true;
 var node_1 = require("./node");
 var LinkedList = /** @class */ (function () {
-    function LinkedList(element) {
-        this.head = new node_1["default"](element);
-        this.count = 1;
+    function LinkedList() {
     }
     LinkedList.prototype.push = function (element) {
         var newNode = new node_1["default"](element);
@@ -56,7 +54,7 @@ var LinkedList = /** @class */ (function () {
         }
         return currentNode;
     };
-    LinkedList.prototype.remove = function (index) {
+    LinkedList.prototype.removeAt = function (index) {
         if (index < 0 || index > this.count)
             throw new Error("this can't happen");
         var currentNode = this.getElementAtIndex(index);
@@ -66,10 +64,35 @@ var LinkedList = /** @class */ (function () {
     };
     ;
     LinkedList.prototype.indexOf = function (element, cb) {
+        if (cb === void 0) { cb = function (el1, el2) { return el1 === el2; }; }
         var index = 0;
+        var current = this.head;
         while (index < this.count) {
+            if (cb(element, current.element)) {
+                return index;
+            }
+            current = current.next;
+            index++;
         }
-        return index;
+        return -1;
+    };
+    LinkedList.prototype.remove = function (element, cb) {
+        if (cb === void 0) { cb = function (el1, el2) { return el1 === el2; }; }
+        var index = this.indexOf(element, cb);
+        this.removeAt(index);
+    };
+    LinkedList.prototype.isEmpty = function () {
+        return this.size() === 0;
+    };
+    LinkedList.prototype.size = function () {
+        return this.count;
+    };
+    LinkedList.prototype.getHead = function () {
+        return this.head;
+    };
+    LinkedList.prototype.clear = function () {
+        this.head = undefined;
+        this.count = 0;
     };
     return LinkedList;
 }());
