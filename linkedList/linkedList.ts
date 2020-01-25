@@ -1,13 +1,9 @@
 import node from './node'
-
+type compareTwoElements<T> = (el1: T, el2: T) => boolean;
 class LinkedList {
-    head: node;
-    count: number;
+    private head: node;
+    private count: number;
 
-    constructor(element: any) {
-        this.head = new node(element);
-        this.count = 1;
-    }
     push(element: any): LinkedList {
         const newNode = new node(element);;
         if (!this.head) {
@@ -61,7 +57,7 @@ class LinkedList {
         previousNode.next = currentNode.next;
         this.count--;
     };
-    indexOf(element: any, cb: Function = (el1, el2) => el1 === el2): number {
+    indexOf(element: any, cb: compareTwoElements<any> = (el1, el2) => el1 === el2): number {
         let index: number = 0;
         let current: node = this.head;
         while (index < this.count) {
@@ -73,10 +69,25 @@ class LinkedList {
         }
         return -1;
     }
-    remove(element: any, cb: Function = (el1, el2) => el1 === el2) {
+    remove(element: any, cb: compareTwoElements<any> = (el1, el2) => el1 === el2) {
         const index = this.indexOf(element, cb);
         this.removeAt(index);
     }
+    isEmpty(): boolean {
+        return this.size() === 0;
+    }
 
+    size(): number {
+        return this.count;
+    }
+
+    getHead(): node {
+        return this.head;
+    }
+
+    clear(): void {
+        this.head = undefined;
+        this.count = 0;
+    }
 
 }
